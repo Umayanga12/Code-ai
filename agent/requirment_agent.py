@@ -2,8 +2,8 @@ from langchain.agents import create_agent
 from langchain.agents.structured_output import ToolStrategy
 
 from llm import llm
-from prompt import PROJECT_REQUIREMENT_GATHERING
-from responce_model import CompleteRequirement
+from prompt.req_gather_prompt import PROJECT_REQUIREMENT_GATHERING
+from responce_model.requrementModel import CompleteRequirement
 
 requirment_agent = create_agent(
     model=llm,
