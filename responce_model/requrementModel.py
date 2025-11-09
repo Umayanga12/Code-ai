@@ -9,9 +9,6 @@ from pydantic import BaseModel, Field
 class ProjectInfo(BaseModel):
     """Basic information about the project"""
 
-    project_id: UUID = Field(
-        default_factory=uuid4, description="Unique identifier for the project"
-    )
     name: str = Field(..., description="Name of the project")
     description: Optional[str] = Field(
         None, description="Detailed description of the project"
@@ -69,7 +66,6 @@ class ProjectMetadata(BaseModel):
 
 
 class Property(BaseModel):
-    id: str = Field(..., description="Unique identifier for the property")
     name: str = Field(..., description="Name of the property/attribute")
     options: List[str] = Field(
         default_factory=list, description="Possible options or values for this property"
@@ -77,14 +73,12 @@ class Property(BaseModel):
 
 
 class Behavior(BaseModel):
-    id: str = Field(..., description="Unique identifier for the behavior")
     description: str = Field(
         ..., description="Description of an entity's behavior or function"
     )
 
 
 class Entity(BaseModel):
-    id: str = Field(..., description="Unique identifier for the entity")
     name: str = Field(..., description="Name of the entity")
     description: str = Field(..., description="Brief description of the entity")
     properties: List[Property] = Field(
@@ -99,7 +93,6 @@ class Entity(BaseModel):
 class Relationship(BaseModel):
     source: str = Field(..., description="ID of the source entity in the relationship")
     target: str = Field(..., description="ID of the target entity in the relationship")
-    relation: str = Field(..., description="Type or name of the relationship")
     description: str = Field(
         ..., description="Explanation of the relationship's nature or role"
     )
