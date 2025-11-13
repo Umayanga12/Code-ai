@@ -93,7 +93,19 @@ class Relationship(BaseModel):
     source: str = Field(..., description="ID of the source entity in the relationship")
     target: str = Field(..., description="ID of the target entity in the relationship")
     description: str = Field(
-        ..., description="Explanation of the relationship's nature or role"
+        ...,
+        description="Explanation of the relationship's nature or role or purpose or what it represents",
+    )
+
+
+class MissingInfo(BaseModel):
+    """Missing information."""
+
+    missing_info: List[str] = Field(
+        ..., description="List of missing or ambiguous fields"
+    )
+    question: str = Field(
+        ..., description="Question to ask the user to provide the missing information"
     )
 
 
@@ -107,3 +119,8 @@ class CompleteRequirement(BaseModel):
     relationships: List[Relationship] = Field(
         ..., description="Relationships connecting the entities"
     )
+    missing_info: MissingInfo = Field(..., description="Missing information")
+
+
+class RequirmentAgentResponceModel(BaseModel):
+    requirements: CompleteRequirement = Field(..., description="Complete requirements")
