@@ -6,11 +6,15 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "dotenv>=0.9.9",
+    "fastapi>=0.121.2",
     "langchain>=1.0.4",
     "langchain-google-genai>=3.0.1",
     "langchain-ollama>=1.0.0",
     "langchain-openai>=1.0.2",
     "langgraph>=1.0.2",
+    "langgraph-cli>=0.4.7",
     "ollama>=0.6.0",
     "pydantic>=2.12.3",
+    "pymongo>=4.15.4",
+    "uvicorn>=0.38.0",
 ]

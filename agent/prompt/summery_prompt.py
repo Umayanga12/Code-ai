@@ -1,3 +1,0 @@
-SUMMERY_PROMPT = """
-
-"""

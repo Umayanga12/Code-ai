@@ -4,7 +4,7 @@ from langchain.messages import AIMessage, HumanMessage
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, MessagesState, StateGraph
 from langgraph.types import Command, interrupt
-from requirment_agent import requirment_agent
+from requirment_agent import requirement_agent
 
 checkpointer = InMemorySaver()
 
@@ -16,7 +16,7 @@ class RequirementsGraphState(MessagesState):
 
 
 def requirements_agent_node(state: RequirementsGraphState) -> RequirementsGraphState:
-    response = requirment_agent.invoke({"messages": state["messages"]})
+    response = requirement_agent.invoke({"messages": state["messages"]})
 
     response = response["structured_response"]
     requirements_response = response.requirements
@@ -67,34 +67,3 @@ graph.add_conditional_edges(
 graph.add_edge("ask_user_for_info", "requirements_agent")
 
 requirements_graph = graph.compile(checkpointer=checkpointer)
-
-#
-# if __name__ == "__main__":
-#     initial_state = {
-#         "messages": [
-#             HumanMessage(
-#                 content="I need to create the system that can manage my product stocks"
-#             )
-#         ],
-#         "requirements_complete": False,
-#         "interruption_message": "",
-#         "requirements": None,
-#     }
-#
-#     config = {"configurable": {"thread_id": "thread-1"}}
-#
-#     result = requirements_graph.invoke(initial_state, config)
-#
-#     while True:
-#         if "__interrupt__" in result:
-#             print(result["__interrupt__"])
-#
-#             user_input = input("")
-#
-#             current_state = Command(resume=user_input)
-#
-#             result = requirements_graph.invoke(current_state, config)
-#         else:
-#             break
-#
-#     print(result["requirements"])
