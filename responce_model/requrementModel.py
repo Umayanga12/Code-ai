@@ -111,7 +111,7 @@ class MissingInfo(BaseModel):
 
 class CompleteRequirement(BaseModel):
     project_metadata: ProjectMetadata = Field(
-        ..., description="Full metadata and configuration of the project"
+        ..., description="Full metadata and configuration of the project. getting the idea about the user's technology preferaces for the project"
     )
     entities: List[Entity] = Field(
         ..., description="List of entities involved in the project"
