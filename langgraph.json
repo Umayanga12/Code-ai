@@ -1,0 +1,6 @@
+{
+  "graphs": {
+    "default": "graph:create_graph"
+  },
+  "dependencies": ["./agent/requirment_system_graph.py"]
+}
