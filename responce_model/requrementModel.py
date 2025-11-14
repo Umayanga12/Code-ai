@@ -17,8 +17,8 @@ class ProjectInfo(BaseModel):
 class DeploymentPreferences(BaseModel):
     """User preferences regarding deployment strategy"""
 
-    use_docker: Optional[bool] = Field(
-        None, description="Indicates if the project should be dockerized"
+    use_docker: bool = Field(
+        False, description="Indicates if the project should be dockerized"
     )
     deploy_project: bool = Field(
         False, description="Indicates if the project needs deployment"
