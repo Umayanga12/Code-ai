@@ -1,8 +1,23 @@
+from posix import access
+from ssl import Options
 from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
 """ Project Information Models """
+
+
+class isPublicUse(BaseModel):
+    """Public use information"""
+
+    public: str = Field(
+        ...,
+        description="Indicates if the project is publicly accessible or limited to a specific group",
+    )
+    expect_traffic: str = Field(
+        ...,
+        description="Indicates if the project expects high traffic",
+    )
 
 
 class ProjectInfo(BaseModel):
@@ -11,6 +26,37 @@ class ProjectInfo(BaseModel):
     name: str = Field(..., description="Name of the project")
     description: Optional[str] = Field(
         None, description="Detailed description of the project"
+    )
+    type: str = Field(
+        ...,
+        description="Type of application system. mobile app or web based system or desktop application or all",
+    )
+    systemUse: isPublicUse = Field(
+        ...,
+        description="Information about the system's usage for planning the project",
+    )
+
+
+class UserAccess(BaseModel):
+    """User access information"""
+
+    role: str = Field(..., description="Role of the user")
+    access_level: str = Field(
+        ...,
+        description="Access level of the user. what does that user role allow them to do",
+    )
+
+
+class SystemUser(BaseModel):
+    """User information about the system"""
+
+    login_Data: str = Field(
+        ...,
+        description="What are the data use to loginto system. such as username/email password etc.",
+    )
+    user_types: List[UserAccess] = Field(
+        ...,
+        description="List of user types that can access the system",
     )
 
 
@@ -111,7 +157,11 @@ class MissingInfo(BaseModel):
 
 class CompleteRequirement(BaseModel):
     project_metadata: ProjectMetadata = Field(
-        ..., description="Full metadata and configuration of the project. getting the idea about the user's technology preferaces for the project"
+        ...,
+        description="Full metadata and configuration of the project. getting the idea about the user's technology preferaces for the project",
+    )
+    sys_user: List[SystemUser] = Field(
+        ..., description="System users and there details like access rights and roles"
     )
     entities: List[Entity] = Field(
         ..., description="List of entities involved in the project"
