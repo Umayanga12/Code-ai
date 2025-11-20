@@ -1,11 +1,13 @@
 import os
 import sys
 
+from agent.requirment.requirment_graph import RequirementsGraphState, requirements_graph
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-sys.path.insert(1, os.path.join(".", "core"))
-sys.path.insert(1, os.path.join(".", "prompt"))
-sys.path.insert(1, os.path.join(".", "responce_model"))
+sys.path.insert(1, os.path.join("..", "core"))
+sys.path.insert(1, os.path.join("..", "prompt"))
+sys.path.insert(1, os.path.join("..", "responce_model"))
 
 import json
 from typing import Optional
@@ -15,7 +17,7 @@ from langchain_core.runnables import RunnableConfig
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, MessagesState, StateGraph
 from langgraph.types import Command
-from requirment_graph import RequirementsGraphState, requirements_graph
+
 
 checkpointer = InMemorySaver()
 
