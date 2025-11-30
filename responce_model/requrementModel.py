@@ -14,6 +14,10 @@ class isPublicUse(BaseModel):
         ...,
         description="Indicates if the project is publicly accessible or limited to a specific group",
     )
+    user_number: int = Field(
+        ...,
+        description="Number of users expected to use the project approximately",
+    )
     expect_traffic: str = Field(
         ...,
         description="Indicates if the project expects high traffic",
@@ -89,14 +93,24 @@ class CICDPreferences(BaseModel):
     )
 
 
+class techstack(BaseModel):
+    for_frontend: str = Field(
+        ...,
+        description="technology that need to use for the frontend. default is React",
+    )
+    for_backend: str = Field(
+        ..., description="technology that need to use for backend. default python"
+    )
+
+
 class ProjectMetadata(BaseModel):
     """Comprehensive metadata describing overall project setup"""
 
     project_info: ProjectInfo = Field(
         ..., description="Core information about the project"
     )
-    programming_language: str = Field(
-        ..., description="Primary language used in the project"
+    programming_language: techstack = Field(
+        ..., description="Primary tech stack used in the project"
     )
     database_type: str = Field(
         ..., description="Primary database technology for the project"
@@ -113,7 +127,8 @@ class ProjectMetadata(BaseModel):
 class Property(BaseModel):
     name: str = Field(..., description="Name of the property/attribute")
     options: List[str] = Field(
-        default_factory=list, description="Possible options or values for this property"
+        default_factory=list,
+        description="Possible options or values for this property. for example for genders, male, female, other",
     )
 
 
@@ -145,13 +160,15 @@ class Relationship(BaseModel):
 
 
 class MissingInfo(BaseModel):
-    """Missing information."""
+    """Missing information - ask ONE question at a time."""
 
-    missing_info: List[str] = Field(
-        ..., description="List of missing or ambiguous fields"
+    missing_item: str = Field(
+        default="",
+        description="The SINGLE most important missing or ambiguous field that you need clarification on RIGHT NOW. Ask about ONE thing at a time, not multiple things."
     )
     question: str = Field(
-        ..., description="Question to ask the user to provide the missing information"
+        default="",
+        description="A SINGLE, specific question to ask the user to provide the ONE missing piece of information identified in missing_item. If all information is complete, leave this empty."
     )
 
 
@@ -171,6 +188,14 @@ class CompleteRequirement(BaseModel):
     )
     missing_info: MissingInfo = Field(..., description="Missing information")
 
+class SpecialNote(BaseModel):
+    special_ppoints: List[str] = Field(
+        ...,
+        description="special notes or points that need to consider which is mentioned by the user"
+    )
 
 class RequirmentAgentResponceModel(BaseModel):
     requirements: CompleteRequirement = Field(..., description="Complete requirements")
+    SpecialNote: Optional[SpecialNote] 
+
+
