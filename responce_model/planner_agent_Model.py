@@ -93,18 +93,6 @@ class DeploymentPlanning(BaseModel):
     )
 
 
-class ResourceEstimation(BaseModel):
-    cpu_cores: Optional[int] = Field(None, description="Estimated CPU cores required")
-    memory_gb: Optional[int] = Field(
-        None, description="Estimated memory required in GB"
-    )
-    storage_gb: Optional[int] = Field(
-        None, description="Estimated storage required in GB"
-    )
-    network_bandwidth_mbps: Optional[int] = Field(
-        None, description="Estimated network bandwidth requirement in Mbps"
-    )
-
 
 class PlannerAgentModel(BaseModel):
     project_name: str = Field(..., description="Project or system name")
@@ -128,9 +116,6 @@ class PlannerAgentModel(BaseModel):
     )
     deployment: Optional[DeploymentPlanning] = Field(
         None, description="Deployment strategies and tools"
-    )
-    resource_estimation: Optional[ResourceEstimation] = Field(
-        None, description="Resource needs estimation"
     )
     notes: Optional[str] = Field(
         None, description="Any additional notes or considerations"
