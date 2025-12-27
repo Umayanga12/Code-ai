@@ -86,6 +86,7 @@ def requirements_subgraph_node(
     # Extract requirements from completed subgraph execution
     requirements = subgraph_result.get("requirements")
 
+
     # The result contains 'requirements' field populated when complete
     return {
         "messages": [AIMessage(content=json.dumps(requirements), name="requirements")],

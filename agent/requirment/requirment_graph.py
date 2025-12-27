@@ -1,3 +1,8 @@
+"""
+Requirements Gathering Graph
+Handles the interactive requirements gathering process with user interrupts.
+"""
+
 from typing import Optional
 
 from langchain.messages import AIMessage, HumanMessage
@@ -11,21 +16,23 @@ checkpointer = InMemorySaver()
 
 
 class RequirementsGraphState(MessagesState):
+    """State for the requirements gathering graph."""
     requirements_complete: bool
     interruption_message: str
     requirements: Optional[dict]
 
 
 def requirements_agent_node(state: RequirementsGraphState) -> RequirementsGraphState:
-    print(f"DEBUG: requirements_agent_node called")
+    """
+    Invoke the requirements agent to gather information.
+    Returns either a question for missing info or complete requirements.
+    """
     response = requirement_agent.invoke({"messages": state["messages"]})
-
     response = response["structured_response"]
     requirements_response = response.requirements
-    print(f"DEBUG: Agent response missing info question: '{requirements_response.missing_info.question}'")
 
+    # Check if agent needs more information
     if requirements_response.missing_info.question != "":
-        print(f"DEBUG: Returning interruption message")
         return {
             "messages": [
                 AIMessage(content=requirements_response.missing_info.question)
@@ -35,8 +42,7 @@ def requirements_agent_node(state: RequirementsGraphState) -> RequirementsGraphS
             "requirements": None,
         }
 
-    # Store complete requirements as dict in state
-    print(f"DEBUG: Requirements complete")
+    # Requirements are complete
     return {
         "messages": [],
         "requirements_complete": True,
@@ -46,15 +52,16 @@ def requirements_agent_node(state: RequirementsGraphState) -> RequirementsGraphS
 
 
 def should_ask_user_for_info(state: RequirementsGraphState) -> bool:
-    result = not state["requirements_complete"]
-    print(f"DEBUG: should_ask_user_for_info: {result}")
-    return result
+    """Determine if we need to ask the user for more information."""
+    return not state["requirements_complete"]
 
 
 def ask_user_for_info(state: RequirementsGraphState) -> RequirementsGraphState:
-    print(f"DEBUG: ask_user_for_info called with message: {state['interruption_message']}")
+    """
+    Interrupt execution to ask user for missing information.
+    Returns the user's response as a new message.
+    """
     user_response = interrupt(state["interruption_message"])
-    print(f"DEBUG: User response received in ask_user_for_info: {user_response}")
 
     return {
         "messages": [HumanMessage(content=user_response)],
@@ -64,6 +71,7 @@ def ask_user_for_info(state: RequirementsGraphState) -> RequirementsGraphState:
     }
 
 
+# Build the requirements graph
 graph = StateGraph(RequirementsGraphState)
 graph.add_node("requirements_agent", requirements_agent_node)
 graph.add_node("ask_user_for_info", ask_user_for_info)
@@ -76,3 +84,4 @@ graph.add_conditional_edges(
 graph.add_edge("ask_user_for_info", "requirements_agent")
 
 requirements_graph = graph.compile(checkpointer=checkpointer)
+

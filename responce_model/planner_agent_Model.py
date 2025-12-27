@@ -77,23 +77,6 @@ class PerformancePlanning(BaseModel):
     )
 
 
-class DeploymentPlanning(BaseModel):
-    environment_strategy: List[str] = Field(
-        default_factory=list,
-        description="Dev, staging, production environment strategy",
-    )
-    container_orchestration: Optional[str] = Field(
-        None, description="E.g., Kubernetes, ECS"
-    )
-    ci_cd_pipeline_tools: Optional[List[str]] = Field(
-        default_factory=list, description="CI/CD tools and automation"
-    )
-    rollback_strategy: Optional[str] = Field(
-        None, description="Mechanisms for rollback in deployments"
-    )
-
-
-
 class PlannerAgentModel(BaseModel):
     project_name: str = Field(..., description="Project or system name")
     system_complexity: str = Field(
@@ -113,9 +96,6 @@ class PlannerAgentModel(BaseModel):
     )
     performance: Optional[PerformancePlanning] = Field(
         None, description="Performance targets and monitoring"
-    )
-    deployment: Optional[DeploymentPlanning] = Field(
-        None, description="Deployment strategies and tools"
     )
     notes: Optional[str] = Field(
         None, description="Any additional notes or considerations"
